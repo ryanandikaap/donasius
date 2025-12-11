@@ -1,14 +1,2 @@
 [
-  {
-    "id": 1,
-    "name": "Anonim",
-    "email": "anonim@ultrassmekda.org",
-    "phone": "0000000000",
-    "amount": 50000,
-    "paymentMethod": "digital-payment",
-    "message": "aa",
-    "proofImage": "/uploads/donasi-1765450447673-748703336.png",
-    "date": "2025-12-11T10:54:07.677Z",
-    "status": "pending"
-  }
 ]

@@ -41,14 +41,23 @@ const HomePage = () => {
         {/* Hero Section */}
         <section className="hero-section">
           <div className="container">
-            <div className="hero-content">
-              <h1 className="hero-title">Bersama untuk Sumatera</h1>
-              <p className="hero-subtitle">
-                Gerakan solidaritas ULTRAS SMEKDA untuk membantu saudara kita yang terdampak bencana alam di Sumatera
-              </p>
-              <Link to="/donate" className="hero-btn">
-                Donasi Sekarang
-              </Link>
+            <div className="hero-wrapper">
+              <div className="hero-content">
+                <h1 className="hero-title">Bersama untuk Sumatera</h1>
+                <p className="hero-subtitle">
+                  Gerakan solidaritas ULTRAS SMEKDA untuk membantu saudara kita yang terdampak bencana alam di Sumatera
+                </p>
+                <Link to="/donate" className="hero-btn">
+                  Donasi Sekarang
+                </Link>
+              </div>
+              <div className="hero-image">
+                <img 
+                  src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&h=600&fit=crop" 
+                  alt="Solidaritas untuk Sumatera" 
+                  className="hero-photo"
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -150,10 +159,11 @@ const HomePage = () => {
               </div>
               
               <div className="why-image">
-                <div className="image-placeholder">
-                  <span className="placeholder-icon">🤝</span>
-                  <p>Solidaritas untuk Sumatera</p>
-                </div>
+                <img 
+                  src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600&h=800&fit=crop" 
+                  alt="Solidaritas untuk Sumatera" 
+                  className="why-photo"
+                />
               </div>
             </div>
           </div>
