@@ -1,0 +1,399 @@
+/* ============================================
+   HEADER - CLEAN & ELEGANT ULTRAS STYLE
+   ============================================ */
+
+.header {
+  background: #000000;
+  color: white;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   MAIN HEADER
+   ============================================ */
+
+.header-main {
+  padding: 2rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-section {
+  flex: 1;
+}
+
+.logo {
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin: 0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tagline {
+  font-size: 0.9rem;
+  margin: 0.3rem 0 0;
+  opacity: 0.7;
+  letter-spacing: 1px;
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+
+.nav-menu {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.8rem 1.5rem;
+  border-radius: 5px;
+  transition: all 0.3s;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link-donate {
+  background: white;
+  color: #000000;
+  font-weight: 700;
+  padding: 0.8rem 2rem;
+  border-radius: 25px;
+}
+
+.nav-link-donate:hover {
+  background: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+
+/* ============================================
+   TABS
+   ============================================ */
+
+.header-tabs {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem 0;
+}
+
+.tabs-wrapper {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.tab-btn {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.8rem 2rem;
+  border-radius: 25px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  transition: all 0.3s;
+  font-size: 0.9rem;
+}
+
+.tab-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.tab-btn.active {
+  background: white;
+  color: #000000;
+  border-color: white;
+}
+
+.tab-icon {
+  font-size: 1.1rem;
+}
+
+/* ============================================
+   INFO PANEL
+   ============================================ */
+
+.info-panel {
+  background: white;
+  color: #000000;
+  padding: 3rem 0;
+  animation: slideDown 0.3s ease;
+  border-top: 3px solid #000000;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.panel-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.panel-header h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #000000;
+}
+
+.panel-header p {
+  color: #666;
+  font-size: 1rem;
+}
+
+/* ============================================
+   USAGE GRID
+   ============================================ */
+
+.usage-grid {
+  display: grid;
+  gap: 2rem;
+  max-width: 100%;
+  margin: 0;
+}
+
+.usage-item {
+  background: #f8f8f8;
+  padding: 1.5rem;
+  border-radius: 10px;
+  border-left: 4px solid #000000;
+}
+
+.usage-bar {
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.usage-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #000000, #333333);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.usage-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.usage-category {
+  font-weight: 700;
+  color: #000000;
+  font-size: 1.1rem;
+}
+
+.usage-details {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.usage-percentage {
+  font-weight: 700;
+  color: #000000;
+  font-size: 1.2rem;
+}
+
+.usage-amount {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* ============================================
+   HISTORY GRID
+   ============================================ */
+
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  max-width: 100%;
+  margin: 0;
+}
+
+.history-item {
+  background: #f8f8f8;
+  padding: 1.5rem;
+  border-radius: 10px;
+  display: flex;
+  gap: 1rem;
+  transition: all 0.3s;
+  border: 2px solid transparent;
+}
+
+.history-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-color: #000000;
+}
+
+.history-avatar {
+  width: 50px;
+  height: 50px;
+  background: #000000;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.history-content {
+  flex: 1;
+}
+
+.history-name {
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.history-message {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0.8rem;
+  line-height: 1.4;
+}
+
+.history-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.8rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.history-amount {
+  font-weight: 700;
+  color: #000000;
+  font-size: 1rem;
+}
+
+.history-date {
+  color: #999;
+  font-size: 0.85rem;
+}
+
+/* ============================================
+   CONTAINER
+   ============================================ */
+
+.container {
+  max-width: 100%;
+  margin: 0;
+  padding: 0 2rem;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .header-main {
+    padding: 1.5rem 0;
+  }
+
+  .header-content {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .logo {
+    font-size: 2rem;
+  }
+
+  .nav-menu {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .nav-link {
+    width: 100%;
+    text-align: center;
+  }
+
+  .tabs-wrapper {
+    flex-direction: column;
+  }
+
+  .tab-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .usage-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .history-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-header h3 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  .tagline {
+    font-size: 0.8rem;
+  }
+
+  .history-item {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .history-avatar {
+    margin: 0 auto;
+  }
+
+  .history-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
