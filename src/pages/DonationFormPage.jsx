@@ -200,11 +200,12 @@ const DonationFormPage = () => {
             /* Success Message */
             <div className="success-container">
               <div className="success-icon">✓</div>
-              <h2>Terima Kasih atas Donasi Anda!</h2>
+              <h2>TENGKYUU OII!!</h2>
               <p className="success-message">
                 Donasi sebesar <strong>{formatCurrency(parseInt(formData.amount))}</strong> telah berhasil dikirim.
               </p>
               <p>Terima kasih atas kontribusi Anda untuk korban bencana Sumatera.</p>
+              <p>Sedikit donasi dari anda dapat membantu sodara kita yang ada di Sumatera</p>
               
               <div className="success-actions">
                 <button onClick={resetForm} className="btn-primary">Donasi Lagi</button>

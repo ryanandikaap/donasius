@@ -174,7 +174,7 @@ const HomePage = () => {
           <div className="container">
             <div className="cta-content">
               <h2>Mari Bersama Membantu</h2>
-              <p>Setiap kontribusi Anda sangat berarti bagi saudara kita di Sumatera</p>
+              <p>Setiap kontribusi Anda sangat berarti bagi saudara kita yang terdampak</p>
               <Link to="/donate" className="cta-btn">
                 Mulai Donasi
               </Link>
