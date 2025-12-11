@@ -15,7 +15,7 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState({ total: 0, count: 0 });
 
   // Password sederhana (dalam production sebaiknya gunakan auth yang lebih aman)
-  const ADMIN_PASSWORD = 'admin123';
+  const ADMIN_PASSWORD = 'ultrassmekdacak1912';
 
   useEffect(() => {
     // Check if already authenticated
