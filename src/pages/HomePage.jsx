@@ -53,7 +53,7 @@ const HomePage = () => {
               </div>
               <div className="hero-image">
                 <img 
-                  src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&h=600&fit=crop" 
+                  src="/usdonasi.png" 
                   alt="Solidaritas untuk Sumatera" 
                   className="hero-photo"
                 />
