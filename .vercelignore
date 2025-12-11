@@ -1,0 +1,34 @@
+# Files to ignore during Vercel deployment
+
+# Backend (not needed in serverless)
+backend/server.js
+backend/package.json
+backend/package-lock.json
+
+# Local uploads (using Vercel Blob instead)
+backend/public/uploads/*
+
+# Development files
+.env.local
+.env.development
+
+# Documentation (optional - can be included)
+# DEPLOYMENT.md
+# QUICKSTART.md
+# CHANGELOG.md
+# SUMMARY.md
+
+# Scripts (not needed in production)
+scripts/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*

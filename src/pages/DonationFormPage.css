@@ -490,6 +490,7 @@
 
 .payment-card.selected .payment-info p {
   opacity: 1;
+  color: #ffffff;
 }
 
 /* ============================================
