@@ -12,7 +12,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchTotalDonations = async () => {
       try {
-        const response = await axios.get('/api/donations/total');
+        const response = await axios.get('/api/total');
         setTotalDonations(response.data.total);
         setDonationCount(response.data.count);
       } catch (error) {

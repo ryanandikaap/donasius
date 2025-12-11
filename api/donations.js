@@ -93,9 +93,9 @@ async function handlePost(req, res) {
       
       console.log('📁 File diterima:', file.originalFilename);
       
-      // Read file buffer using dynamic import for fs
-      const fs = await import('fs');
-      const fileBuffer = fs.readFileSync(file.filepath);
+      // Read file buffer using fs.promises
+      const { readFile } = await import('fs/promises');
+      const fileBuffer = await readFile(file.filepath);
       
       // Generate unique filename
       const timestamp = Date.now();
