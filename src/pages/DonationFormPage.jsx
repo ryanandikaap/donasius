@@ -204,7 +204,6 @@ const DonationFormPage = () => {
               <p className="success-message">
                 Donasi sebesar <strong>{formatCurrency(parseInt(formData.amount))}</strong> telah berhasil dikirim.
               </p>
-              <p>Terima kasih atas kontribusi Anda untuk korban bencana Sumatera.</p>
               <p>Sedikit donasi dari anda dapat membantu sodara kita yang ada di Sumatera</p>
               
               <div className="success-actions">
