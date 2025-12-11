@@ -1,6 +1,6 @@
 # 📝 Changelog - Vercel Deployment Setup
 
-## [1.0.0] - 2024-01-11
+## [1.0.0] - 2025-01-11
 
 ### 🎉 Major Changes: Serverless Architecture
 
@@ -223,7 +223,7 @@ None at the moment. Report issues to: ultrassmekda@gmail.com
 ### 📞 Support
 
 - Email: ultrassmekda@gmail.com
-- Phone: 0812-3456-7890
+- Phone: 0851-3473-3794
 - Documentation: See README.md, DEPLOYMENT.md, QUICKSTART.md
 
 ---

@@ -139,7 +139,7 @@ curl https://your-domain.vercel.app/api/health
 {
   "status": "ok",
   "message": "Server backend berjalan",
-  "timestamp": "2024-01-11T...",
+  "timestamp": "2025-01-11T...",
   "environment": "production"
 }
 ```

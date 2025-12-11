@@ -168,7 +168,7 @@ Health check endpoint
 {
   "status": "ok",
   "message": "Server backend berjalan",
-  "timestamp": "2024-01-01T00:00:00.000Z",
+  "timestamp": "2025-01-01T00:00:00.000Z",
   "environment": "production"
 }
 ```

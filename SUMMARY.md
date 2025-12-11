@@ -199,7 +199,7 @@ Before deploying, make sure:
 - 📖 Read: [DEPLOYMENT.md](./DEPLOYMENT.md)
 - 🚀 Quick: [QUICKSTART.md](./QUICKSTART.md)
 - 📧 Email: ultrassmekda@gmail.com
-- 📞 Phone: 0812-3456-7890
+- 📞 Phone: 0851-3473-3794
 
 ---
 

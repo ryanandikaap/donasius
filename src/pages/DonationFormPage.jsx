@@ -12,8 +12,8 @@ const DonationFormPage = () => {
     email: '',
     phone: '',
     amount: '',
-    paymentMethod: 'digital-payment',
-    selectedBank: '',
+    paymentMethod: 'bank-transfer',
+    selectedBank: 'bca',
     selectedEwallet: '',
     isAnonymous: false,
     message: ''
@@ -147,12 +147,13 @@ const DonationFormPage = () => {
   // Reset form
   const resetForm = () => {
     setIsSubmitted(false);
-    setFormData({
+      setFormData({
       name: '',
       email: '',
       phone: '',
       amount: '',
-      paymentMethod: 'digital-payment',
+      paymentMethod: 'bank-transfer',
+      selectedBank: 'bca',
       isAnonymous: false,
       message: ''
     });
@@ -365,167 +366,23 @@ const DonationFormPage = () => {
                   <div className="form-step">
                     <h2 className="step-title">Metode Pembayaran</h2>
                     
-                    <div className="payment-options">
-                      <label className={`payment-card ${formData.paymentMethod === 'digital-payment' ? 'selected' : ''}`}>
-                        <input
-                          type="radio"
-                          name="paymentMethod"
-                          value="digital-payment"
-                          checked={formData.paymentMethod === 'digital-payment'}
-                          onChange={handleInputChange}
-                          className="radio-input"
-                        />
-                        <div className="payment-content">
-                          <div className="payment-icon">📱</div>
-                          <div className="payment-info">
-                            <h4>Pembayaran Digital</h4>
-                            <p>Dana, GoPay, OVO, LinkAja</p>
+                    {/* Bank BCA Details */}
+                    <div className="payment-details">
+                      <div className="selected-account">
+                        <h4 className="selected-title">Transfer ke Rekening:</h4>
+                        <div className="account-detail-box">
+                          <div className="account-detail-icon">🏦</div>
+                          <div className="account-detail-info">
+                            <div className="account-detail-name">Bank BCA</div>
+                            <div className="account-detail-number">6170911651</div>
+                            <div className="account-detail-holder">a.n. A****** P***A G</div>
                           </div>
                         </div>
-                      </label>
-
-                      <label className={`payment-card ${formData.paymentMethod === 'bank-transfer' ? 'selected' : ''}`}>
-                        <input
-                          type="radio"
-                          name="paymentMethod"
-                          value="bank-transfer"
-                          checked={formData.paymentMethod === 'bank-transfer'}
-                          onChange={handleInputChange}
-                          className="radio-input"
-                        />
-                        <div className="payment-content">
-                          <div className="payment-icon">🏦</div>
-                          <div className="payment-info">
-                            <h4>Transfer Bank</h4>
-                            <p>BCA, Mandiri, BRI</p>
-                          </div>
-                        </div>
-                      </label>
+                        <p className="payment-instruction">
+                          Silakan transfer sesuai nominal donasi Anda ke rekening di atas, kemudian upload bukti transfer.
+                        </p>
+                      </div>
                     </div>
-
-                    {/* Payment Selection */}
-                    {formData.paymentMethod === 'digital-payment' ? (
-                      <div className="payment-details">
-                        <h3 className="details-title">Pilih E-Wallet</h3>
-                        <div className="payment-selection-grid">
-                          <button
-                            type="button"
-                            className={`selection-card ${formData.selectedEwallet === 'dana' ? 'selected' : ''}`}
-                            onClick={() => setFormData(prev => ({...prev, selectedEwallet: 'dana'}))}
-                          >
-                            <div className="selection-icon">💰</div>
-                            <div className="selection-name">Dana</div>
-                          </button>
-                          <button
-                            type="button"
-                            className={`selection-card ${formData.selectedEwallet === 'gopay' ? 'selected' : ''}`}
-                            onClick={() => setFormData(prev => ({...prev, selectedEwallet: 'gopay'}))}
-                          >
-                            <div className="selection-icon">💚</div>
-                            <div className="selection-name">GoPay</div>
-                          </button>
-                          <button
-                            type="button"
-                            className={`selection-card ${formData.selectedEwallet === 'ovo' ? 'selected' : ''}`}
-                            onClick={() => setFormData(prev => ({...prev, selectedEwallet: 'ovo'}))}
-                          >
-                            <div className="selection-icon">💙</div>
-                            <div className="selection-name">OVO</div>
-                          </button>
-                          <button
-                            type="button"
-                            className={`selection-card ${formData.selectedEwallet === 'linkaja' ? 'selected' : ''}`}
-                            onClick={() => setFormData(prev => ({...prev, selectedEwallet: 'linkaja'}))}
-                          >
-                            <div className="selection-icon">🔴</div>
-                            <div className="selection-name">LinkAja</div>
-                          </button>
-                        </div>
-
-                        {/* Show selected e-wallet details */}
-                        {formData.selectedEwallet && (
-                          <div className="selected-account">
-                            <h4 className="selected-title">Transfer ke:</h4>
-                            <div className="account-detail-box">
-                              <div className="account-detail-icon">
-                                {formData.selectedEwallet === 'dana' && '💰'}
-                                {formData.selectedEwallet === 'gopay' && '💚'}
-                                {formData.selectedEwallet === 'ovo' && '💙'}
-                                {formData.selectedEwallet === 'linkaja' && '🔴'}
-                              </div>
-                              <div className="account-detail-info">
-                                <div className="account-detail-name">
-                                  {formData.selectedEwallet === 'dana' && 'Dana'}
-                                  {formData.selectedEwallet === 'gopay' && 'GoPay'}
-                                  {formData.selectedEwallet === 'ovo' && 'OVO'}
-                                  {formData.selectedEwallet === 'linkaja' && 'LinkAja'}
-                                </div>
-                                <div className="account-detail-number">
-                                  {formData.selectedEwallet === 'dana' && '0812-3456-7890'}
-                                  {formData.selectedEwallet === 'gopay' && '0812-3456-7891'}
-                                  {formData.selectedEwallet === 'ovo' && '0812-3456-7892'}
-                                  {formData.selectedEwallet === 'linkaja' && '0812-3456-7893'}
-                                </div>
-                                <div className="account-detail-holder">a.n. ULTRAS SMEKDA</div>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="payment-details">
-                        <h3 className="details-title">Pilih Bank</h3>
-                        <div className="payment-selection-grid">
-                          <button
-                            type="button"
-                            className={`selection-card ${formData.selectedBank === 'bca' ? 'selected' : ''}`}
-                            onClick={() => setFormData(prev => ({...prev, selectedBank: 'bca'}))}
-                          >
-                            <div className="selection-icon">🏦</div>
-                            <div className="selection-name">BCA</div>
-                          </button>
-                          <button
-                            type="button"
-                            className={`selection-card ${formData.selectedBank === 'mandiri' ? 'selected' : ''}`}
-                            onClick={() => setFormData(prev => ({...prev, selectedBank: 'mandiri'}))}
-                          >
-                            <div className="selection-icon">🏦</div>
-                            <div className="selection-name">Mandiri</div>
-                          </button>
-                          <button
-                            type="button"
-                            className={`selection-card ${formData.selectedBank === 'bri' ? 'selected' : ''}`}
-                            onClick={() => setFormData(prev => ({...prev, selectedBank: 'bri'}))}
-                          >
-                            <div className="selection-icon">🏦</div>
-                            <div className="selection-name">BRI</div>
-                          </button>
-                        </div>
-
-                        {/* Show selected bank details */}
-                        {formData.selectedBank && (
-                          <div className="selected-account">
-                            <h4 className="selected-title">Transfer ke:</h4>
-                            <div className="account-detail-box">
-                              <div className="account-detail-icon">🏦</div>
-                              <div className="account-detail-info">
-                                <div className="account-detail-name">
-                                  {formData.selectedBank === 'bca' && 'Bank BCA'}
-                                  {formData.selectedBank === 'mandiri' && 'Bank Mandiri'}
-                                  {formData.selectedBank === 'bri' && 'Bank BRI'}
-                                </div>
-                                <div className="account-detail-number">
-                                  {formData.selectedBank === 'bca' && '1234567890'}
-                                  {formData.selectedBank === 'mandiri' && '9876543210'}
-                                  {formData.selectedBank === 'bri' && '5555666677'}
-                                </div>
-                                <div className="account-detail-holder">a.n. ULTRAS SMEKDA</div>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )}
 
                     {/* Upload Proof */}
                     <div className="upload-section">
@@ -577,7 +434,7 @@ const DonationFormPage = () => {
                       </div>
                       <div className="summary-row">
                         <span>Metode</span>
-                        <span>{formData.paymentMethod === 'digital-payment' ? 'Pembayaran Digital' : 'Transfer Bank'}</span>
+                        <span>Transfer Bank BCA</span>
                       </div>
                     </div>
 
@@ -610,8 +467,8 @@ const DonationFormPage = () => {
       
       <footer className="form-footer">
         <div className="container">
-          <p>© 2024 ULTRAS SMEKDA - Solidaritas untuk Sumatera</p>
-          <p>📧 ultrassmekda@gmail.com | 📞 0812-3456-7890</p>
+          <p>© 2025 ULTRAS SMEKDA - Solidaritas untuk Sumatera</p>
+          <p>📧 ultrassmekda@gmail.com | 📞 0851-3473-3794</p>
         </div>
       </footer>
     </div>

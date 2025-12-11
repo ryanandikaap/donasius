@@ -107,7 +107,7 @@ const HomePage = () => {
               <div className="mission-card">
                 <div className="mission-icon">🏠</div>
                 <h3>Tempat Pengungsian</h3>
-                <p>Menyediakan tenda dan fasilitas darurat untuk pengungsi</p>
+                <p>membantu mendistribusikan tenda dan fasilitas darurat untuk pengungsi</p>
               </div>
               
               <div className="mission-card">
@@ -136,7 +136,7 @@ const HomePage = () => {
                     <div className="why-icon">✓</div>
                     <div>
                       <h4>Solidaritas Supporter</h4>
-                      <p>Gerakan bersama dari komunitas supporter untuk membantu sesama</p>
+                      <p>Gerakan bersama untuk membantu sesama</p>
                     </div>
                   </div>
                   
@@ -151,8 +151,8 @@ const HomePage = () => {
                   <div className="why-item">
                     <div className="why-icon">✓</div>
                     <div>
-                      <h4>Langsung ke Lokasi</h4>
-                      <p>Bantuan disalurkan langsung ke lokasi bencana tanpa perantara</p>
+                      <h4>Disalurkan melalui perantara</h4>
+                      <p>Bantuan disalurkan ke pihak yang terpercaya</p>
                     </div>
                   </div>
                 </div>
@@ -160,7 +160,7 @@ const HomePage = () => {
               
               <div className="why-image">
                 <img 
-                  src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600&h=800&fit=crop" 
+                  src="/usdonas.png" 
                   alt="Solidaritas untuk Sumatera" 
                   className="why-photo"
                 />
@@ -199,12 +199,12 @@ const HomePage = () => {
             
             <div className="footer-contact">
               <p>📧 ultrassmekda@gmail.com</p>
-              <p>📞 0812-3456-7890</p>
+              <p>📞 Cp 0851-3473-3794</p>
             </div>
           </div>
           
           <div className="footer-bottom">
-            <p>© 2024 ULTRAS SMEKDA - Dibuat dengan ❤️ untuk Sumatera</p>
+            <p>© 2025 ULTRAS SMEKDA - Dibuat dengan ❤️ untuk Sumatera</p>
           </div>
         </div>
       </footer>
