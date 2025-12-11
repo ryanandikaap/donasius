@@ -338,7 +338,7 @@ const AdminDashboard = () => {
 
       {/* Footer */}
       <footer className="admin-footer">
-        <p>© 2024 ULTRAS SMEKDA - Admin Dashboard</p>
+        <p>© 2025 ULTRAS SMEKDA - Admin Dashboard</p>
       </footer>
     </div>
   );
