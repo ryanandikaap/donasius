@@ -150,8 +150,64 @@ app.get('/api/donations/total', (req, res) => {
   });
 });
 
+// 6.5 Delete donasi
+app.delete('/api/donations', (req, res) => {
+  try {
+    const { id } = req.query;
+    
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        error: 'ID donasi diperlukan'
+      });
+    }
+    
+    // Find donation index
+    const donationIndex = donations.findIndex(d => d.id === parseInt(id));
+    
+    if (donationIndex === -1) {
+      return res.status(404).json({
+        success: false,
+        error: 'Donasi tidak ditemukan'
+      });
+    }
+    
+    // Get the donation before deleting (to delete the image file)
+    const donation = donations[donationIndex];
+    
+    // Delete the proof image file if exists
+    if (donation.proofImage) {
+      const imagePath = path.join(__dirname, 'public', donation.proofImage);
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+        console.log('🗑️ File gambar dihapus:', imagePath);
+      }
+    }
+    
+    // Remove from array
+    donations.splice(donationIndex, 1);
+    
+    // Save to file
+    const dataPath = path.join(__dirname, 'donations.json');
+    fs.writeFileSync(dataPath, JSON.stringify(donations, null, 2));
+    
+    console.log('✅ Donasi dihapus:', id);
+    
+    res.json({
+      success: true,
+      message: 'Donasi berhasil dihapus'
+    });
+    
+  } catch (error) {
+    console.error('❌ Error deleting donation:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Terjadi kesalahan server'
+    });
+  }
+});
 
-// 6.4 Test upload endpoint
+// 6.6 Test upload endpoint
 app.post('/api/test-upload', upload.single('image'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'Tidak ada file' });
@@ -175,11 +231,12 @@ app.listen(PORT, () => {
   console.log(`📍 Port: http://localhost:${PORT}`);
   console.log(`📁 Upload folder: ${uploadsDir}`);
   console.log('\n🔗 Endpoints:');
-  console.log('   GET  /api/health');
-  console.log('   GET  /api/donations');
-  console.log('   GET  /api/donations/total');
-  console.log('   POST /api/donations');
-  console.log('   POST /api/test-upload');
+  console.log('   GET    /api/health');
+  console.log('   GET    /api/donations');
+  console.log('   GET    /api/donations/total');
+  console.log('   POST   /api/donations');
+  console.log('   DELETE /api/donations?id={id}');
+  console.log('   POST   /api/test-upload');
 
   console.log('='.repeat(50) + '\n');
 });
