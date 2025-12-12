@@ -7,7 +7,9 @@ const Header = () => {
   const [showDonationUsage, setShowDonationUsage] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [donationHistory, setDonationHistory] = useState([]);
+  const [fundUsage, setFundUsage] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [usageLoading, setUsageLoading] = useState(true);
   
   // Fetch donations from backend
   useEffect(() => {
@@ -33,13 +35,34 @@ const Header = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const fundUsage = [
-    { category: 'Bantuan Darurat', percentage: 40, amount: 50000000 },
-    { category: 'Logistik & Distribusi', percentage: 30, amount: 37500000 },
-    { category: 'Tempat Pengungsian', percentage: 20, amount: 25000000 },
-    { category: 'Kesehatan', percentage: 5, amount: 6250000 },
-    { category: 'Operasional', percentage: 5, amount: 6250000 },
-  ];
+  // Fetch fund usage from backend
+  useEffect(() => {
+    const fetchFundUsage = async () => {
+      try {
+        const response = await axios.get('/api/fund-usage');
+        setFundUsage(response.data);
+        setUsageLoading(false);
+      } catch (error) {
+        console.error('Error fetching fund usage:', error);
+        setUsageLoading(false);
+      }
+    };
+
+    fetchFundUsage();
+
+    // Refresh every 30 seconds
+    const interval = setInterval(fetchFundUsage, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Calculate total fund usage
+  const totalFundUsage = fundUsage.reduce((sum, item) => sum + item.amount, 0);
+
+  // Calculate percentage for each item
+  const fundUsageWithPercentage = fundUsage.map(item => ({
+    ...item,
+    percentage: totalFundUsage > 0 ? ((item.amount / totalFundUsage) * 100).toFixed(1) : 0
+  }));
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('id-ID', {
@@ -76,8 +99,13 @@ const Header = () => {
         <div className="container">
           <div className="header-content">
             <div className="logo-section">
-              <h1 className="logo">ULTRAS SMEKDA</h1>
-              <p className="tagline">Solidaritas untuk Sumatera</p>
+              <div className="logo-wrapper">
+                <div className="logo-text">
+                  <h1 className="logo">ULTRAS SMEKDA</h1>
+                  <p className="tagline">Solidaritas untuk Sumatera</p>
+                </div>
+                <img src="/usss.png" alt="ULTRAS SMEKDA Logo" className="header-logo-img" />
+              </div>
             </div>
             
             <nav className="nav-menu">
@@ -126,22 +154,35 @@ const Header = () => {
               <p>Setiap rupiah yang Anda donasikan dikelola dengan penuh tanggung jawab</p>
             </div>
             
-            <div className="usage-grid">
-              {fundUsage.map((item, index) => (
-                <div key={index} className="usage-item">
-                  <div className="usage-bar">
-                    <div className="usage-fill" style={{ width: `${item.percentage}%` }}></div>
-                  </div>
-                  <div className="usage-info">
-                    <div className="usage-category">{item.category}</div>
-                    <div className="usage-details">
-                      <span className="usage-percentage">{item.percentage}%</span>
-                      <span className="usage-amount">{formatCurrency(item.amount)}</span>
+            {usageLoading ? (
+              <div className="loading-message" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
+                Memuat data penggunaan dana...
+              </div>
+            ) : fundUsageWithPercentage.length === 0 ? (
+              <div className="empty-message" style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
+                Belum ada data penggunaan dana. Admin akan menambahkan segera.
+              </div>
+            ) : (
+              <div className="usage-grid">
+                {fundUsageWithPercentage.map((item) => (
+                  <div key={item.id} className="usage-item">
+                    <div className="usage-bar">
+                      <div className="usage-fill" style={{ width: `${item.percentage}%` }}></div>
+                    </div>
+                    <div className="usage-info">
+                      <div className="usage-category">{item.category}</div>
+                      {item.description && (
+                        <div className="usage-description">{item.description}</div>
+                      )}
+                      <div className="usage-details">
+                        <span className="usage-percentage">{item.percentage}%</span>
+                        <span className="usage-amount">{formatCurrency(item.amount)}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}

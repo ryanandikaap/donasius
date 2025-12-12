@@ -15,6 +15,11 @@ const AdminDashboard = () => {
   const [editDonation, setEditDonation] = useState(null);
   const [editAmount, setEditAmount] = useState('');
   const [stats, setStats] = useState({ total: 0, count: 0 });
+  const [activeTab, setActiveTab] = useState('donations'); // 'donations' or 'fund-usage'
+  const [fundUsage, setFundUsage] = useState([]);
+  const [showAddUsageModal, setShowAddUsageModal] = useState(false);
+  const [usageForm, setUsageForm] = useState({ category: '', amount: '', description: '' });
+  const [deleteUsageConfirm, setDeleteUsageConfirm] = useState(null);
 
   // Password sederhana (dalam production sebaiknya gunakan auth yang lebih aman)
   const ADMIN_PASSWORD = 'ultrassmekdacak1912';
@@ -25,6 +30,7 @@ const AdminDashboard = () => {
     if (auth === 'true') {
       setIsAuthenticated(true);
       fetchDonations();
+      fetchFundUsage();
     }
   }, []);
 
@@ -63,6 +69,60 @@ const AdminDashboard = () => {
       setLoading(false);
     }
   };
+
+  const fetchFundUsage = async () => {
+    try {
+      const response = await axios.get('/api/fund-usage');
+      setFundUsage(response.data || []);
+    } catch (error) {
+      console.error('Error fetching fund usage:', error);
+    }
+  };
+
+  const handleAddUsage = async () => {
+    try {
+      if (!usageForm.category || !usageForm.amount) {
+        setError('Kategori dan jumlah wajib diisi');
+        return;
+      }
+
+      await axios.post('/api/fund-usage', {
+        category: usageForm.category,
+        amount: parseFloat(usageForm.amount),
+        description: usageForm.description
+      });
+
+      setShowAddUsageModal(false);
+      setUsageForm({ category: '', amount: '', description: '' });
+      setError('');
+      fetchFundUsage();
+    } catch (error) {
+      console.error('Error adding fund usage:', error);
+      setError('Gagal menambahkan penggunaan dana');
+    }
+  };
+
+  const handleDeleteUsage = async (id) => {
+    try {
+      await axios.delete(`/api/fund-usage?id=${id}`);
+      setFundUsage(fundUsage.filter(u => u.id !== id));
+      setDeleteUsageConfirm(null);
+    } catch (error) {
+      console.error('Error deleting fund usage:', error);
+      setError('Gagal menghapus penggunaan dana');
+    }
+  };
+
+  const handleUsageInputChange = (e) => {
+    const { name, value } = e.target;
+    setUsageForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  // Calculate total fund usage
+  const totalFundUsage = fundUsage.reduce((sum, item) => sum + item.amount, 0);
 
   const handleDelete = async (id) => {
     try {
@@ -198,7 +258,26 @@ const AdminDashboard = () => {
         </div>
       </header>
 
+      {/* Tabs */}
+      <div className="admin-tabs">
+        <div className="tabs-container">
+          <button
+            className={`admin-tab ${activeTab === 'donations' ? 'active' : ''}`}
+            onClick={() => setActiveTab('donations')}
+          >
+            📝 Daftar Donasi
+          </button>
+          <button
+            className={`admin-tab ${activeTab === 'fund-usage' ? 'active' : ''}`}
+            onClick={() => setActiveTab('fund-usage')}
+          >
+            💰 Penggunaan Dana
+          </button>
+        </div>
+      </div>
+
       {/* Stats Cards */}
+      {activeTab === 'donations' && (
       <div className="stats-container">
         <div className="stat-card">
           <div className="stat-icon">💰</div>
@@ -224,8 +303,38 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
+      )}
+
+      {activeTab === 'fund-usage' && (
+      <div className="stats-container">
+        <div className="stat-card">
+          <div className="stat-icon">💸</div>
+          <div className="stat-info">
+            <div className="stat-label">Total Penggunaan Dana</div>
+            <div className="stat-value">{formatCurrency(totalFundUsage)}</div>
+          </div>
+        </div>
+        
+        <div className="stat-card">
+          <div className="stat-icon">📊</div>
+          <div className="stat-info">
+            <div className="stat-label">Jumlah Kategori</div>
+            <div className="stat-value">{fundUsage.length} Item</div>
+          </div>
+        </div>
+        
+        <div className="stat-card">
+          <div className="stat-icon">📈</div>
+          <div className="stat-info">
+            <div className="stat-label">Sisa Dana</div>
+            <div className="stat-value">{formatCurrency(Math.max(0, stats.total - totalFundUsage))}</div>
+          </div>
+        </div>
+      </div>
+      )}
 
       {/* Donations Table */}
+      {activeTab === 'donations' && (
       <div className="table-container">
         <div className="table-header">
           <h2>📝 Daftar Donasi</h2>
@@ -325,6 +434,170 @@ const AdminDashboard = () => {
           </div>
         )}
       </div>
+      )}
+
+      {/* Fund Usage Table */}
+      {activeTab === 'fund-usage' && (
+      <div className="table-container">
+        <div className="table-header">
+          <h2>💰 Penggunaan Dana</h2>
+          <button onClick={() => setShowAddUsageModal(true)} className="btn-add">
+            ➕ Tambah Penggunaan Dana
+          </button>
+        </div>
+
+        {error && <div className="error-banner">{error}</div>}
+
+        {fundUsage.length === 0 ? (
+          <div className="empty-state">
+            <div className="empty-icon">📭</div>
+            <h3>Belum Ada Data Penggunaan Dana</h3>
+            <p>Klik tombol "Tambah Penggunaan Dana" untuk menambahkan data</p>
+          </div>
+        ) : (
+          <div className="table-wrapper">
+            <table className="donations-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Kategori</th>
+                  <th>Deskripsi</th>
+                  <th>Jumlah</th>
+                  <th>Persentase</th>
+                  <th>Tanggal</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {fundUsage.map((usage) => {
+                  const percentage = totalFundUsage > 0 ? ((usage.amount / totalFundUsage) * 100).toFixed(1) : 0;
+                  return (
+                    <tr key={usage.id}>
+                      <td>#{usage.id}</td>
+                      <td className="donor-name">{usage.category}</td>
+                      <td className="message-cell">
+                        {usage.description || '-'}
+                      </td>
+                      <td className="amount">{formatCurrency(usage.amount)}</td>
+                      <td>
+                        <span className="payment-badge">{percentage}%</span>
+                      </td>
+                      <td className="date">{formatDate(usage.date)}</td>
+                      <td>
+                        <button
+                          onClick={() => setDeleteUsageConfirm(usage.id)}
+                          className="btn-delete"
+                          title="Hapus"
+                        >
+                          🗑️ Hapus
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+      )}
+
+      {/* Add Fund Usage Modal */}
+      {showAddUsageModal && (
+        <div className="modal-overlay" onClick={() => setShowAddUsageModal(false)}>
+          <div className="modal-content confirm-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>➕ Tambah Penggunaan Dana</h3>
+            </div>
+            <div className="modal-body">
+              <div className="edit-form">
+                <div className="form-group">
+                  <label>Kategori: *</label>
+                  <input 
+                    type="text" 
+                    name="category"
+                    value={usageForm.category}
+                    onChange={handleUsageInputChange}
+                    placeholder="Contoh: Bantuan Darurat, Logistik, dll"
+                    className="form-input"
+                    autoFocus
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Jumlah: *</label>
+                  <input 
+                    type="number" 
+                    name="amount"
+                    value={usageForm.amount}
+                    onChange={handleUsageInputChange}
+                    placeholder="Masukkan jumlah dalam Rupiah"
+                    className="form-input"
+                    min="1"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Deskripsi (Opsional):</label>
+                  <textarea 
+                    name="description"
+                    value={usageForm.description}
+                    onChange={handleUsageInputChange}
+                    placeholder="Deskripsi penggunaan dana..."
+                    className="form-input"
+                    rows="3"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button 
+                onClick={handleAddUsage} 
+                className="btn-confirm-edit"
+              >
+                💾 Simpan
+              </button>
+              <button 
+                onClick={() => {
+                  setShowAddUsageModal(false);
+                  setUsageForm({ category: '', amount: '', description: '' });
+                  setError('');
+                }} 
+                className="btn-cancel"
+              >
+                Batal
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Usage Confirmation Modal */}
+      {deleteUsageConfirm && (
+        <div className="modal-overlay" onClick={() => setDeleteUsageConfirm(null)}>
+          <div className="modal-content confirm-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>⚠️ Konfirmasi Hapus</h3>
+            </div>
+            <div className="modal-body">
+              <p>Apakah Anda yakin ingin menghapus penggunaan dana ini?</p>
+              <p className="warning-text">Tindakan ini tidak dapat dibatalkan!</p>
+            </div>
+            <div className="modal-footer">
+              <button 
+                onClick={() => handleDeleteUsage(deleteUsageConfirm)} 
+                className="btn-confirm-delete"
+              >
+                Ya, Hapus
+              </button>
+              <button 
+                onClick={() => setDeleteUsageConfirm(null)} 
+                className="btn-cancel"
+              >
+                Batal
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Image Modal */}
       {selectedImage && (

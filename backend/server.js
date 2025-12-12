@@ -67,6 +67,7 @@ app.use('/uploads', express.static(uploadsDir));
 // 5. DATA STORAGE
 // ======================
 let donations = [];
+let fundUsage = [];
 
 // ======================
 // 6. ROUTES
@@ -261,7 +262,98 @@ app.delete('/api/donations', (req, res) => {
   }
 });
 
-// 6.7 Test upload endpoint
+// 6.7 Get fund usage
+app.get('/api/fund-usage', (req, res) => {
+  res.json(fundUsage);
+});
+
+// 6.8 Add fund usage
+app.post('/api/fund-usage', (req, res) => {
+  try {
+    const { category, amount, description } = req.body;
+    
+    if (!category || !amount) {
+      return res.status(400).json({
+        success: false,
+        error: 'Kategori dan jumlah wajib diisi'
+      });
+    }
+    
+    const newFundUsage = {
+      id: fundUsage.length + 1,
+      category,
+      amount: parseFloat(amount),
+      description: description || '',
+      date: new Date().toISOString()
+    };
+    
+    fundUsage.push(newFundUsage);
+    
+    // Save to file
+    const dataPath = path.join(__dirname, 'fund-usage.json');
+    fs.writeFileSync(dataPath, JSON.stringify(fundUsage, null, 2));
+    
+    console.log('✅ Penggunaan dana ditambahkan:', newFundUsage);
+    
+    res.status(201).json({
+      success: true,
+      message: 'Penggunaan dana berhasil ditambahkan',
+      data: newFundUsage
+    });
+    
+  } catch (error) {
+    console.error('❌ Error adding fund usage:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Terjadi kesalahan server'
+    });
+  }
+});
+
+// 6.9 Delete fund usage
+app.delete('/api/fund-usage', (req, res) => {
+  try {
+    const { id } = req.query;
+    
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        error: 'ID penggunaan dana diperlukan'
+      });
+    }
+    
+    const usageIndex = fundUsage.findIndex(u => u.id === parseInt(id));
+    
+    if (usageIndex === -1) {
+      return res.status(404).json({
+        success: false,
+        error: 'Penggunaan dana tidak ditemukan'
+      });
+    }
+    
+    fundUsage.splice(usageIndex, 1);
+    
+    // Save to file
+    const dataPath = path.join(__dirname, 'fund-usage.json');
+    fs.writeFileSync(dataPath, JSON.stringify(fundUsage, null, 2));
+    
+    console.log('✅ Penggunaan dana dihapus:', id);
+    
+    res.json({
+      success: true,
+      message: 'Penggunaan dana berhasil dihapus'
+    });
+    
+  } catch (error) {
+    console.error('❌ Error deleting fund usage:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Terjadi kesalahan server'
+    });
+  }
+});
+
+// 6.10 Test upload endpoint
 app.post('/api/test-upload', upload.single('image'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'Tidak ada file' });
@@ -291,6 +383,9 @@ app.listen(PORT, () => {
   console.log('   POST   /api/donations');
   console.log('   PUT    /api/donations?id={id}');
   console.log('   DELETE /api/donations?id={id}');
+  console.log('   GET    /api/fund-usage');
+  console.log('   POST   /api/fund-usage');
+  console.log('   DELETE /api/fund-usage?id={id}');
   console.log('   POST   /api/test-upload');
 
   console.log('='.repeat(50) + '\n');
