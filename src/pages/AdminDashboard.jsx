@@ -12,6 +12,8 @@ const AdminDashboard = () => {
   const [error, setError] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [editDonation, setEditDonation] = useState(null);
+  const [editAmount, setEditAmount] = useState('');
   const [stats, setStats] = useState({ total: 0, count: 0 });
 
   // Password sederhana (dalam production sebaiknya gunakan auth yang lebih aman)
@@ -75,6 +77,43 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error('Error deleting donation:', error);
       setError('Gagal menghapus donasi');
+    }
+  };
+
+  const handleEditClick = (donation) => {
+    setEditDonation(donation);
+    setEditAmount(donation.amount.toString());
+  };
+
+  const handleEditSubmit = async () => {
+    try {
+      const newAmount = parseFloat(editAmount);
+      
+      if (!newAmount || newAmount <= 0) {
+        setError('Jumlah donasi harus lebih dari 0');
+        return;
+      }
+
+      await axios.put(`/api/donations?id=${editDonation.id}`, {
+        amount: newAmount
+      });
+
+      // Update local state
+      const updatedDonations = donations.map(d => 
+        d.id === editDonation.id ? { ...d, amount: newAmount } : d
+      );
+      setDonations(updatedDonations);
+      
+      // Recalculate stats
+      const total = updatedDonations.reduce((sum, d) => sum + (d.amount || 0), 0);
+      setStats({ total, count: updatedDonations.length });
+      
+      setEditDonation(null);
+      setEditAmount('');
+      setError('');
+    } catch (error) {
+      console.error('Error updating donation:', error);
+      setError('Gagal mengupdate donasi');
     }
   };
 
@@ -262,12 +301,22 @@ const AdminDashboard = () => {
                       )}
                     </td>
                     <td>
-                      <button
-                        onClick={() => setDeleteConfirm(donation.id)}
-                        className="btn-delete"
-                      >
-                        🗑️ Hapus
-                      </button>
+                      <div className="action-buttons">
+                        <button
+                          onClick={() => handleEditClick(donation)}
+                          className="btn-edit"
+                          title="Edit Nominal"
+                        >
+                          ✏️ Edit
+                        </button>
+                        <button
+                          onClick={() => setDeleteConfirm(donation.id)}
+                          className="btn-delete"
+                          title="Hapus Donasi"
+                        >
+                          🗑️ Hapus
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -301,6 +350,70 @@ const AdminDashboard = () => {
               </a>
               <button onClick={() => setSelectedImage(null)} className="btn-close">
                 Tutup
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Donation Modal */}
+      {editDonation && (
+        <div className="modal-overlay" onClick={() => setEditDonation(null)}>
+          <div className="modal-content confirm-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>✏️ Edit Nominal Donasi</h3>
+            </div>
+            <div className="modal-body">
+              <div className="edit-form">
+                <div className="form-group">
+                  <label>Nama Donatur:</label>
+                  <input 
+                    type="text" 
+                    value={editDonation.name} 
+                    disabled 
+                    className="form-input-disabled"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Nominal Saat Ini:</label>
+                  <input 
+                    type="text" 
+                    value={formatCurrency(editDonation.amount)} 
+                    disabled 
+                    className="form-input-disabled"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Nominal Baru: *</label>
+                  <input 
+                    type="number" 
+                    value={editAmount}
+                    onChange={(e) => setEditAmount(e.target.value)}
+                    placeholder="Masukkan nominal baru"
+                    className="form-input"
+                    min="1"
+                    autoFocus
+                  />
+                  <small className="form-hint">Masukkan jumlah dalam Rupiah</small>
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button 
+                onClick={handleEditSubmit} 
+                className="btn-confirm-edit"
+              >
+                💾 Simpan
+              </button>
+              <button 
+                onClick={() => {
+                  setEditDonation(null);
+                  setEditAmount('');
+                  setError('');
+                }} 
+                className="btn-cancel"
+              >
+                Batal
               </button>
             </div>
           </div>

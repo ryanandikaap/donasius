@@ -154,6 +154,64 @@ async function handlePost(req, res) {
 }
 
 /**
+ * PUT Handler - Update donation amount
+ */
+async function handlePut(req, res) {
+  try {
+    const { id } = req.query;
+    const { amount } = req.body;
+    
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        error: 'ID donasi diperlukan'
+      });
+    }
+    
+    if (!amount || amount <= 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Jumlah donasi harus lebih dari 0'
+      });
+    }
+    
+    // Get existing donations
+    const donations = await redis.get('donations') || [];
+    
+    // Find donation to update
+    const donationIndex = donations.findIndex(d => d.id === parseInt(id));
+    
+    if (donationIndex === -1) {
+      return res.status(404).json({
+        success: false,
+        error: 'Donasi tidak ditemukan'
+      });
+    }
+    
+    // Update donation amount
+    donations[donationIndex].amount = parseFloat(amount);
+    
+    // Save updated donations to Redis
+    await redis.set('donations', donations);
+    
+    console.log('✅ Donasi diupdate:', id, 'Amount:', amount);
+    
+    res.status(200).json({
+      success: true,
+      message: 'Donasi berhasil diupdate',
+      data: donations[donationIndex]
+    });
+    
+  } catch (error) {
+    console.error('❌ Error updating donation:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Terjadi kesalahan server: ' + error.message
+    });
+  }
+}
+
+/**
  * DELETE Handler - Delete a donation
  */
 async function handleDelete(req, res) {
@@ -209,7 +267,7 @@ export default async function handler(req, res) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST,DELETE');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST,PUT,DELETE');
   res.setHeader(
     'Access-Control-Allow-Headers',
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
@@ -225,6 +283,8 @@ export default async function handler(req, res) {
     return handleGet(req, res);
   } else if (req.method === 'POST') {
     return handlePost(req, res);
+  } else if (req.method === 'PUT') {
+    return handlePut(req, res);
   } else if (req.method === 'DELETE') {
     return handleDelete(req, res);
   } else {

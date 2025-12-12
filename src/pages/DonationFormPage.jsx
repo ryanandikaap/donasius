@@ -47,6 +47,23 @@ const DonationFormPage = () => {
       [name]: type === 'checkbox' ? checked : value
     }));
   };
+
+  // Handle amount input - only allow numbers, no dots or commas
+  const handleAmountChange = (e) => {
+    const value = e.target.value;
+    // Remove all non-numeric characters
+    const numericValue = value.replace(/\D/g, '');
+    setFormData(prev => ({
+      ...prev,
+      amount: numericValue
+    }));
+  };
+
+  // Format amount for display
+  const formatAmountDisplay = (amount) => {
+    if (!amount) return '';
+    return new Intl.NumberFormat('id-ID').format(amount);
+  };
   
   // Handle image upload
   const handleImageUpload = (e) => {
@@ -256,16 +273,16 @@ const DonationFormPage = () => {
                       <div className="amount-input-wrapper">
                         <span className="currency-prefix">Rp</span>
                         <input
-                          type="number"
+                          type="text"
                           name="amount"
-                          value={formData.amount}
-                          onChange={handleInputChange}
-                          placeholder="Masukkan jumlah"
-                          min="10000"
+                          value={formatAmountDisplay(formData.amount)}
+                          onChange={handleAmountChange}
+                          placeholder="Masukkan jumlah (tanpa titik/koma)"
                           className="amount-input"
+                          inputMode="numeric"
                         />
                       </div>
-                      <p className="input-hint">Minimal donasi Rp 10.000</p>
+                      <p className="input-hint">Minimal donasi Rp 10.000 (Masukkan angka saja, tanpa titik atau koma)</p>
                     </div>
 
                     <button type="button" onClick={nextStep} className="btn-next">

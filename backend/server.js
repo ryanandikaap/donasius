@@ -150,7 +150,61 @@ app.get('/api/donations/total', (req, res) => {
   });
 });
 
-// 6.5 Delete donasi
+// 6.5 Update donasi amount
+app.put('/api/donations', (req, res) => {
+  try {
+    const { id } = req.query;
+    const { amount } = req.body;
+    
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        error: 'ID donasi diperlukan'
+      });
+    }
+    
+    if (!amount || amount <= 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Jumlah donasi harus lebih dari 0'
+      });
+    }
+    
+    // Find donation index
+    const donationIndex = donations.findIndex(d => d.id === parseInt(id));
+    
+    if (donationIndex === -1) {
+      return res.status(404).json({
+        success: false,
+        error: 'Donasi tidak ditemukan'
+      });
+    }
+    
+    // Update amount
+    donations[donationIndex].amount = parseFloat(amount);
+    
+    // Save to file
+    const dataPath = path.join(__dirname, 'donations.json');
+    fs.writeFileSync(dataPath, JSON.stringify(donations, null, 2));
+    
+    console.log('✅ Donasi diupdate:', id, 'Amount:', amount);
+    
+    res.json({
+      success: true,
+      message: 'Donasi berhasil diupdate',
+      data: donations[donationIndex]
+    });
+    
+  } catch (error) {
+    console.error('❌ Error updating donation:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Terjadi kesalahan server'
+    });
+  }
+});
+
+// 6.6 Delete donasi
 app.delete('/api/donations', (req, res) => {
   try {
     const { id } = req.query;
@@ -207,7 +261,7 @@ app.delete('/api/donations', (req, res) => {
   }
 });
 
-// 6.6 Test upload endpoint
+// 6.7 Test upload endpoint
 app.post('/api/test-upload', upload.single('image'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'Tidak ada file' });
@@ -235,6 +289,7 @@ app.listen(PORT, () => {
   console.log('   GET    /api/donations');
   console.log('   GET    /api/donations/total');
   console.log('   POST   /api/donations');
+  console.log('   PUT    /api/donations?id={id}');
   console.log('   DELETE /api/donations?id={id}');
   console.log('   POST   /api/test-upload');
 

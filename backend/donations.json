@@ -4,11 +4,23 @@
     "name": "Anonim",
     "email": "anonim@ultrassmekda.org",
     "phone": "0000000000",
+    "amount": 10000,
+    "paymentMethod": "bank-transfer",
+    "message": "",
+    "proofImage": "/uploads/donasi-1765519174806-232844581.png",
+    "date": "2025-12-12T05:59:34.814Z",
+    "status": "pending"
+  },
+  {
+    "id": 2,
+    "name": "Anonim",
+    "email": "anonim@ultrassmekda.org",
+    "phone": "0000000000",
     "amount": 50000,
     "paymentMethod": "bank-transfer",
     "message": "",
-    "proofImage": "/uploads/donasi-1765476237165-597516615.png",
-    "date": "2025-12-11T18:03:57.177Z",
+    "proofImage": "/uploads/donasi-1765519338527-574071962.png",
+    "date": "2025-12-12T06:02:18.535Z",
     "status": "pending"
   }
 ]
